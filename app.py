@@ -14,23 +14,31 @@ def index():
 @app.route('/cluster/<layer_id>/<cluster_id>', methods = ['GET'])
 def get_cluster(layer_id, cluster_id):
 
-    words = DATA[layer_id][cluster_id]["words"] 
-    label = DATA[layer_id][cluster_id]["label"]
+    cluster_id=int(cluster_id)
+    temp = "c" + str(cluster_id)
 
-    word_frequencies = Counter(words) 
+    if temp not in DATA[layer_id]: 
+        return f"<p> Invalid cluster ID {temp} </p>"
 
-    return render_template("display.html", word_frequencies=word_frequencies)
 
 
-def main(): 
+    words = DATA[layer_id][temp]["words"] 
+    label = DATA[layer_id][temp]["label"]
+
+    word_frequencies = list(Counter(words).items()) 
+
+    return render_template("display.html", word_frequencies=word_frequencies, label=label, cluster_id=cluster_id, layer_id=layer_id)
+
+
+if __name__=="__main__": 
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--data_path", help="paht to where the data is stored")
     parser.add_argument("-p", "--port", help="port used to run the app")
-    parser.add_argument("-h", "--host", help="host used to run the app")
+    parser.add_argument("-hs", "--host", help="host used to run the app")
     args=parser.parse_args()
-    
-    data_path = args.data_path
+
+    data_path=args.data_path
     PORT=args.port
     HOST=args.host
 
@@ -38,5 +46,3 @@ def main():
     app.run(host=HOST, debug=True, port= PORT)
 
 
-if __name__=="__main__": 
-    main() 
