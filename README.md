@@ -22,7 +22,11 @@ You can view the data in a web application by running the __run.sh__ file.
 # Concept probing and Neuron Analysis
 
 We used the NeuroX package to train linear probes and perform neuron analysis. You can view the documentation of the package [here](https://neurox.readthedocs.io/en/latest/index.html)
+# Todo 
 
+- [ ] Integrate context sentences along with label in to the display 
+- [ ] Modify the display
+- [ ] Add cross architectural comparison between the models in the display
 # Citation
 
 If you used the dataset please cite 
