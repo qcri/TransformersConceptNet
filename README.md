@@ -27,6 +27,7 @@ We used the NeuroX package to train linear probes and perform neuron analysis. Y
 - [ ] Integrate context sentences along with label in to the display 
 - [ ] Modify the display
 - [ ] Add cross architectural comparison between the models in the display
+- [ ] Add a list of interesting concepts
 # Citation
 
 If you used the dataset please cite 
