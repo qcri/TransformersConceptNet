@@ -7,15 +7,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"
         integrity="sha512-lGnVsh3WK0YJ7NX7rQmUu6kqF7vqELuDrUTnxpI2iD86VwI+OlQhi3EAJJZbrBUOfDFOAYAkigxkApHGM2IZTg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='display_style.css') }}">
     <title> Transformers Concept Net</title>
 </head>
 
-<body>  
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"> {{model}}</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Layers
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=0)}}">Layer 0 </a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=1)}}">Layer 1</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=2)}}">Layer 2</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=3)}}">Layer 3 </a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=4)}}">Layer 4</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=5)}}">Layer 5</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=6)}}">Layer 6 </a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=7)}}">Layer 7</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=8)}}">Layer 8</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=9)}}">Layer 9 </a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=10)}}">Layer 10 </a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=11)}}">Layer 11</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('get_cluster', cluster_id=0, layer_id=12)}}">Layer 12</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     <div class="container">
-        <div id="clusters">
+        <div class="clusters">
             <h1> Cluster {{cluster_id}} </h1>
             <div id="control-panel">
                 <div id="previous" class="nav-control"
@@ -27,21 +59,68 @@
                         class="arrow">▶</span> <span>Cluster {{cluster_id + 1}}</span></div>
             </div>
         </div>
-    </div>
+        <div class="labels"> 
+            <h3>Label: {{label}}</h3>
+            <div id="sentences"> </div>
 
-    <script type="text/javascript"> 
-    
-    var frequencies = {{ word_frequencies| tojson | safe }};
-        WordCloud(document.getElementById('canvas'), {
-            list: frequencies,
-            weightFactor: 10,
-            shrinkToFit: true,
-            shuffle: false,
-            minSize: 1
-        });
+        </div>
 
 
-    </script>
-    
+        <script type="text/javascript">
+
+
+
+          var frequencies = {{ word_frequencies| tojson | safe }};
+          var cluster_id = {{cluster_id | tojson | safe}}; 
+          WordCloud(document.getElementById('canvas'), {
+              list: frequencies,
+              weightFactor: 10,
+              shrinkToFit: true,
+              shuffle: false,
+              minSize: 1
+          });
+
+          // let current_word= "";
+
+          // function hover_handler(item, dimension, event) { 
+          //   if (item==undefined) { 
+          //     return; 
+          //   }
+          //   item = item[0]
+          //   if (current_word === item) { 
+          //     return;
+          //   }
+          //   current_word = item;
+          //   var xhr = new XMLHttpRequest();
+          //   xhr.open("POST", "/sentences", false)
+          //   xhr.setRequestHeader('Content-Type', 'application/json');
+          //   xhr.send(JSON.stringify({ 
+          //       word: current_word, 
+          //       cluster_id: cluster_id, 
+          //       layer_id: layer_id
+          //   }));
+
+          //   let response = JSON.parse(xhr.response) 
+          //   if (response["success"]) { 
+          //     let container = document.getElementById("sentences"); 
+          //     let html = "<h3>" + current_word + "</h3>" 
+          //     respose['sentences'].forEach((s) => { 
+          //       let tokens = s[0]; 
+          //       let highlight = s[1]
+          //     }
+          //     )
+
+          //   }
+            
+          // }
+ 
+
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
 </body>
+
 </html>
