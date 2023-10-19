@@ -43,7 +43,7 @@ def get_sentences():
     if temp not in list(clusters.keys()): 
         return f"<p> Invalid cluster ID {temp} </p>"
     
-    local_sentences = [[SENTENCES[sentence_idx], token_idx] for token, sentence_idx, token_idx in clusters[cluster_id] if token == word]
+    local_sentences = [[SENTENCES[sentence_idx], token_idx] for token, sentence_idx, token_idx in clusters[f"c{cluster_id}"] if token == word]
 
     return {"success": True, "sentences": local_sentences}
     
@@ -54,8 +54,8 @@ if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-dp", "--data_path", help="path to where the data was downloaded")
-    parser.add_argument("-p", "--port", help="port used to run the app")
-    parser.add_argument("-hs", "--host", help="host used to run the app")
+    parser.add_argument("-p", "--port", default="8080", help="port used to run the app")
+    parser.add_argument("-hs", "--host", default="0.0.0.0", help="host used to run the app")
     args=parser.parse_args()
 
     DATA_PATH=args.data_path

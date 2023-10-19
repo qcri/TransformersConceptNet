@@ -2,43 +2,49 @@
 Code and Data Associated with **Can LLMs facilitate interpretation of pre-trained language models?** 
 
 # Data 
-The data can be downloaded from the following link [Transformers Concept Net](https://drive.google.com/file/d/17Dc3gDfCTFpM-wOhkao3fi5yMEHPBkGx/view?usp=drive_link)
+The data can be downloaded from the [project page](https://neurox.qcri.org/projects/transformers-concept-net/)
 
 # Data Description 
 
-We use agglomerative hierarchical clustering over contextualized representations and then annotate these concepts using GPT annotations. Our study involved several 12-layered transformer models, including Bert-cased, RoBERTa, XLNet, and Albert. For more details, please refer to the paper
+We use agglomerative hierarchical clustering over contextualized representations and then annotate these concepts using GPT annotations. Our study involved several 12-layered transformer models, including BERT-cased, RoBERTa, XLNet, and ALBERT. For more details, please refer to the paper
 
-# Load data 
-you can use the __read_data.py__ file to print the words and the label for a latent concept. You can specify the path to data, layer that the concept belongs to, and the concept id.
-```
-python read_data.py -p $path -l $layer -c $concept_id
-```
-
-The output is the list of words along with the chatgpt provided label for the concept
 # Load data into display 
 
-You can view the data in a web application by running the __run.sh__ file. 
+Start the webapp using the following command:
+
+```bash
+python -u app.py -d <path-to-downloaded-data>
+```
+
+and visit http://localhost:8080 in your browser. The port and hostname can be passed as additional arguments to `app.py`.
 
 # Concept probing and Neuron Analysis
 
 We used the NeuroX package to train linear probes and perform neuron analysis. You can view the documentation of the package [here](https://neurox.readthedocs.io/en/latest/index.html)
+
 # Todo 
 
-- [ ] Integrate context sentences along with label in to the display 
-- [ ] Modify the display
+- [ ] Add requirements.txt + instructions for venv
+
 - [ ] Add cross architectural comparison between the models in the display
 - [ ] Add a list of interesting concepts
+
 # Citation
 
 If you used the dataset please cite 
 
 ```
-@misc{mousi2023llms,
-      title={Can LLMs facilitate interpretation of pre-trained language models?}, 
-      author={Basel Mousi and Nadir Durrani and Fahim Dalvi},
-      year={2023},
-      eprint={2305.13386},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{mousi2023llms,
+      title = "Can LLMs Facilitate Interpretation of Pre-trained Language 
+      Models?",
+      author = "Mousi, Basel  and
+      Durrani, Nadir  and 
+      Dalvi, Fahim", 
+      booktitle = "Proceedings of the 2023 Conference on Empirical Methods 
+      in Natural Language Processing",
+      month = dec, 
+      year = "2023", 
+      publisher = "Association for Computational Linguistics", 
+      url = "https://browse.arxiv.org/pdf/2305.13386.pdf"
 }
 ```
