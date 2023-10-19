@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, request, url_for
 from collections import Counter
 import argparse 
 from pathlib import Path
-from utils import read_cluster_data, read_annotations, read_sentences
+from utils import read_cluster_data, read_annotations, read_sentences, load_all_cluster_data
 app = Flask(__name__) 
 
 
@@ -21,26 +21,34 @@ def get_cluster(cluster_id, layer_id):
     if temp not in list(cluster_to_words.keys()): 
         return f"<p> Invalid cluster ID {temp} </p>"
     words = cluster_to_words[temp] 
-    label = read_annotations(annotations_path)
+    label = read_annotations(annotations_path)[temp]
     
     word_frequencies = list(Counter(words).items()) 
 
     return render_template("display.html", word_frequencies=word_frequencies, label=label, cluster_id=cluster_id, layer_id=layer_id, model=MODEL)
 
-# @app.route("/sentences", methods=['POST']) 
-# def get_sentences(): 
-#     cluster_id = request.json["cluster_id"]
-#     word = request.json["word"] 
-#     layer_id = request.json["layer_id"]
-#     cluster_id = int(cluster_id)
-#     word = word.strip() 
-#     sentences = DATA[layer_id][cluster_id]["sentences"]
-#     if cluster_id not in DATA[layer_id]:
-#         return {"success": False, "error": f"<p> Invalid Cluster ID {cluster_id} </p>"} 
-    
-#     local_sentences= DATA[layer_id]["sentences"]
+@app.route("/sentences", methods=['POST']) 
+def get_sentences(): 
+    cluster_id = request.json["cluster_id"]
+    word = request.json["word"] 
+    layer_id = request.json["layer_id"]
 
-#     return {"success":True, "sentences": local_sentences}
+    word = word.strip() 
+    temp = "c" + str(cluster_id)
+
+    clusters_path = Path(DATA_PATH) / f"layer{layer_id}" / "clusters-600.txt"
+
+    clusters = load_all_cluster_data(clusters_path=clusters_path)
+
+    if temp not in list(clusters.keys()): 
+        return f"<p> Invalid cluster ID {temp} </p>"
+    
+    local_sentences = [[SENTENCES[sentence_idx], token_idx] for token, sentence_idx, token_idx in clusters[cluster_id] if token == word]
+
+    return {"success": True, "sentences": local_sentences}
+    
+
+
 
 if __name__=="__main__": 
 

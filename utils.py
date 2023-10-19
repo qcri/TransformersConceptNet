@@ -164,10 +164,24 @@ def read_sentences(path_to_sentences: str) -> List:
             lines.append(l) 
     return lines
 
+
+def load_all_cluster_data(clusters_path): 
+    clusters = defaultdict(list)
+ 
+    with open(clusters_path) as fp:
+        for line_idx, line in enumerate(fp):
+            token, _, sentence_idx, token_idx, cluster_idx = line.strip().rsplit("|||")
+
+            sentence_idx = int(sentence_idx)
+            token_idx = int(token_idx)
+            cluster_idx = int(cluster_idx)
+
+            clusters["c" + str(cluster_idx)].append((token, sentence_idx, token_idx))
+    return clusters
+
+
+
 def main():
-
-
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", help="path to the txt file where the clusters are stored")
     parser.add_argument("-c", "--cluster", help="Cluster For Which we want to return the words")
