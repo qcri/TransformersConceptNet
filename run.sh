@@ -2,7 +2,7 @@
 #SBATCH -J app #name of the job
 #SBATCH -o run_app.txt
 
-data_path="/alt/mt/tcav-basel/tcn/TCN/bert.json"
+data_path="data/bert-base-cased"
 port="8088"
 host="0.0.0.0"
 
