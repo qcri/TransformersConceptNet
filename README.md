@@ -10,6 +10,20 @@ We use agglomerative hierarchical clustering over contextualized representations
 
 # Load data into display 
 
+Clone this repository: 
+```
+git clone https://github.com/qcri/TransformersConceptNet.git
+cd TransformersConceptNet
+```
+Create and activate virtual environment: 
+```
+python -m venv .envs/tcn
+source .envs/tcn/bin/activate
+```
+Install requirements: 
+```
+pip install -r requirements.txt
+```
 Start the webapp using the following command:
 
 ```bash
@@ -24,10 +38,7 @@ We used the NeuroX package to train linear probes and perform neuron analysis. Y
 
 # Todo 
 
-- [ ] Add requirements.txt + instructions for venv
-
 - [ ] Add cross architectural comparison between the models in the display
-- [ ] Add a list of interesting concepts
 
 # Citation
 
