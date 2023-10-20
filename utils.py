@@ -21,12 +21,11 @@ def cluster_read(fname):
 
     Returns
     -------
-
     words: List
         A list of words corresponding to latent concepts of the passed data.
         Each word will be associated with a latent concept (also called a cluster)
     words_idx: List
-        A list of word indices corresponding to occurance location of each word
+        A list of word indices corresponding to occurence location of each word
         in the sentences.
     cluster_idx: List
         A list of cluster ids corresponding to the data passed. Each layer will
@@ -62,11 +61,9 @@ def read_cluster_data(fname):
 
     Returns
     -------
-
     clusterToWords: Dict
         A mapping (or dictionary) between cluster and words. The keys of the dictionary
-        are clusters, and the corresponding values are words corresponding to that cluster.
-      
+        are clusters, and the corresponding values are words corresponding to that cluster.  
     """
     clusterToWords  = defaultdict(list)
     words, words_idx, sent_idx, cluster_idx = cluster_read(fname)
@@ -76,98 +73,67 @@ def read_cluster_data(fname):
     return clusterToWords
 
 
-def map_clusters_to_sentences(fname: str): 
-
+def read_annotations(path):
     """
-    Given a .txt file corresponding to a latent concepts of a layer, the function returns a mapping between 
-    cluster ids and sentence ids. 
-
-    Parameters 
-    ------------
-    fname : str 
-        Path to where the latent concepts data is stored for a corresponding layer. 
-        (Usually stored in a .txt file)
+    Given a path to the annotations file; the function 
+    returns the LLM annotations for the clusters in the form of 
+    a dictionary
     
-    Returns
-    ------------
-
-    clusterToWords: Dict 
-
-        A mapping (dictionary) between cluster and words. The keys of the dictionary are clusters, 
-        and the corresponding values are words corresponding to that cluster. 
-    """
-
-    cluster_to_sent_ids = defaultdict(list) 
-    words, words_idx, sent_idx, cluster_idx = cluster_read(fname)
-    for i, elem in enumerate(cluster_idx): 
-        cluster = "c" + str(cluster_idx[i])
-        cluster_to_sent_ids[cluster].append(sent_idx[i])
-    return cluster_to_sent_ids
-
-
-def get_frequency_counts(clusterToWords):
-    """
-    given a mapping between clusters and word ids, the functions returns another
-    mapping between clusters and counts of words in each cluster
     Parameters
     ----------
-    clusterToWords : Dict
-        A mapping between cluster ids and words
-
-
+    fname : str
+        Path to JSON annotations file
     Returns
     -------
-    result: Dict
-        A mapping between cluster ids and word counts for each cluster
-
+    labels: Dict
+        LLM labels for the clusters. 
     """
-    result = {}
-    for cluster in clusterToWords:
-        count = Counter(clusterToWords[cluster])
-        result[cluster] = list(count.items())
-    return result
-
-
-
-def read_annotations(path): 
     with open(path, "r") as reader: 
         labels = json.load(reader)
     return labels
 
-
-
-def read_txt_file(path: str) -> List: 
-    elements = []
-    with open(path, 'r') as reader: 
-        for line in reader: 
-            elements.append(line.strip())
-    return elements
-
-
 def read_sentences(path_to_sentences: str) -> List: 
-    """READING THE SENTENCES FILE. USED THE CODE DEVELOPED FOR THE TCAV PROJECT
+    """
+    Given a path to the sentences file, the function returns
+    a list of sentences
 
     Parameters
     ----------
     path_to_sentences: str :
-        
+        A path to where the sentences file is stored
 
     Returns
     -------
-
+    sentences: List
+        A list of sentences 
     """
-    lines = []
+    sentences = []
     with open(path_to_sentences, "r") as reader: 
         data = json.load(reader) 
         for line in data: 
             l = line.rstrip('\r\n')
-            lines.append(l) 
-    return lines
+            sentences.append(l) 
+    return sentences
 
 
 def load_all_cluster_data(clusters_path): 
+    """
+    Given a path to where the cluster data is stored, the function 
+    returns a dictionary where each key is a cluster id, and each value 
+    is a list of tuples consisting of tokens, sentence ids, and token ids 
+    (corresponding to the cluster)
+
+    Parameters
+    ----------
+    clusters_path: str :
+        A path to where the cluster data is stored
+        
+    Returns
+    -------
+    clusters: Dict
+        A dictionary containing the cluster data. 
+    """
     clusters = defaultdict(list)
- 
     with open(clusters_path) as fp:
         for line_idx, line in enumerate(fp):
             token, _, sentence_idx, token_idx, cluster_idx = line.strip().rsplit("|||")
@@ -181,19 +147,5 @@ def load_all_cluster_data(clusters_path):
 
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", help="path to the txt file where the clusters are stored")
-    parser.add_argument("-c", "--cluster", help="Cluster For Which we want to return the words")
-    args = parser.parse_args()
-
-    cluster_to_words = read_cluster_data(args.file)
-
-    print(cluster_to_words[args.cluster])
 
 
-
-
-
-if __name__ == '__main__':
-    main()
